@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: wagering
+      POSTGRES_USER: wager
+      POSTGRES_PASSWORD: wager
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wager -d wagering"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+
+  localstack:
+    image: localstack/localstack:3.8
+    environment:
+      SERVICES: sqs
+      AWS_DEFAULT_REGION: us-east-1
+      PERSISTENCE: 1
+    ports: ["4566:4566"]
+    volumes: ["localstack_data:/var/lib/localstack"]
+
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://wager:wager@postgres:5432/wagering
+      SQS_ENDPOINT: http://localstack:4566
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/wager-transactions.fifo
+      SQS_DLQ_URL: http://localstack:4566/000000000000/wager-transactions-dlq.fifo
+      SQS_EVENT_QUEUE_URL: http://localstack:4566/000000000000/wager-events.fifo
+    ports: ["3000:3000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      localstack: { condition: service_started }
+
+volumes:
+  postgres_data:
+  localstack_data:
