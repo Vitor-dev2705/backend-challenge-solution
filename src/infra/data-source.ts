@@ -1,0 +1,11 @@
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
+import { WalletEntity } from './entities/wallet.entity';
+import { WagerTransactionEntity } from './entities/wager-transaction.entity';
+import { LedgerEntity } from './entities/ledger.entity';
+import { InboxEntity } from './entities/inbox.entity';
+import { OutboxEntity } from './entities/outbox.entity';
+import { InitialSchema1710000000000 } from './migrations/1710000000000-InitialSchema';
+import { PendingReferenceRetries1710000001000 } from './migrations/1710000001000-PendingReferenceRetries';
+import { ProcessedReversalIndex1710000002000 } from './migrations/1710000002000-ProcessedReversalIndex';
+export const AppDataSource = new DataSource({ type: 'postgres', url: process.env.DATABASE_URL ?? 'postgres://wager:wager@localhost:5432/wagering', entities: [WalletEntity, WagerTransactionEntity, LedgerEntity, InboxEntity, OutboxEntity], migrations: [InitialSchema1710000000000, PendingReferenceRetries1710000001000, ProcessedReversalIndex1710000002000], synchronize: false, logging: false });
