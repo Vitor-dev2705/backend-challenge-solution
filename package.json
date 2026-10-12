@@ -1,0 +1,44 @@
+{
+  "name": "distributed-wagering-processor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Distributed wagering processor challenge solution",
+  "scripts": {
+    "build": "nest build",
+    "start": "bun --watch src/main.ts",
+    "start:prod": "bun dist/main.js",
+    "test": "bun test ./test/*.test.ts",
+    "test:integration": "bun test ./integration/*.test.ts",
+    "test:watch": "bun test --watch ./test/*.test.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/infra/data-source.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/infra/data-source.ts",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"integration/**/*.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.850.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^12.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "decimal.js": "^10.6.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "typeorm": "^0.3.25",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.7",
+    "@types/bun": "latest",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.30",
+    "@typescript-eslint/eslint-plugin": "^8.35.0",
+    "@typescript-eslint/parser": "^8.35.0",
+    "eslint": "^9.30.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
